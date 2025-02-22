@@ -1,0 +1,24 @@
+# Ignore thư mục build và output
+/target/
+/build/
+
+# Ignore thư viện biên dịch
+*.class
+*.jar
+*.war
+*.ear
+
+# Ignore file môi trường
+.env
+application.properties
+application.yml
+
+# Ignore thư mục IDE
+.idea/
+*.iml
+*.log
+
+# Ignore Maven wrapper và cache
+.mvn/
+**/node_modules/
+**/.gradle/
