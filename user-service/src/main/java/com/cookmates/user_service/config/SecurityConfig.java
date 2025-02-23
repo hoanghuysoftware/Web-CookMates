@@ -51,19 +51,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(AbstractHttpConfigurer::disable)
-                .csrf(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(request -> {
+                    request
+                            .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasAnyRole("ADMIN", "USER")
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAnyRole("ADMIN", "USER")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
+                            .requestMatchers("/api/v1/users/register", "/api/v1/users/login", "/api/v1/users/logout").permitAll()
+                            .anyRequest().authenticated();
+                })
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .exceptionHandling(e -> e.authenticationEntryPoint(jwtEntryPoint))
-                .authorizeHttpRequests(request -> {
-                    request
-                            .requestMatchers("/api/v1/users/register", "/api/v1/users/login", "/api/v1/users/logout").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
-                            .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasAnyRole("ADMIN", "USER")
-                            .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAnyRole("ADMIN", "USER")
-                            .anyRequest().authenticated();
-                });
+        ;
         return http.build();
     }
 }

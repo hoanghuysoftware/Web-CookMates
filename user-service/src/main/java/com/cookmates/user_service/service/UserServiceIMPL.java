@@ -27,6 +27,9 @@ public class UserServiceIMPL implements IUserService {
 
     @Override
     public UserDTO getUserById(long id) {
+        modelMapper.typeMap(User.class, UserDTO.class).addMappings(
+                e->e.skip(UserDTO::setPassword)
+        );
         User user = userRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("User with id " + id + " not found")
         );
@@ -71,7 +74,7 @@ public class UserServiceIMPL implements IUserService {
         user.setFullName(userDTO.getFullName());
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setRole(RoleName.valueOf(userDTO.getRole()));
         userRepository.save(user);
 

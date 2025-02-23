@@ -1,4 +1,4 @@
-package com.cookmates.user_service.utils;
+package com.cookmates.recipeservice.utils;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +19,6 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
         logger.error("Unauthorized access\n"+authException);
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, authException.getMessage());
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
     }
 }

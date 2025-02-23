@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,6 +26,8 @@ public class Recipe {
     private int prepTime;
     private int cookTime;
     private int servings;
+    @ElementCollection
+    private List<Long> categoryIds = new ArrayList<>();
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
